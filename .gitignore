@@ -1,0 +1,33 @@
+# ---------- Java / Maven ----------
+app/target/
+*.class
+hs_err_pid*.log
+
+# ---------- Terraform ----------
+# El .terraform.lock.hcl SI se sube: fija las versiones exactas de los proveedores.
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# ---------- Secretos: nunca van al repositorio ----------
+.env
+*.pem
+*.key
+credenciales*
+
+# ---------- Editores y sistema ----------
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# ---------- Resultados de las pruebas de carga ----------
+pruebas/carga/resultados/

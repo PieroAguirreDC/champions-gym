@@ -1,0 +1,8 @@
+# Todo el repositorio con saltos de linea LF (AWS y GitHub Actions corren en Linux).
+# Asi un script, Dockerfile o .tf editado en Windows no se rompe por CRLF.
+* text=auto eol=lf
+
+# Excepciones
+mvnw.cmd text eol=crlf
+*.png binary
+*.jpg binary
