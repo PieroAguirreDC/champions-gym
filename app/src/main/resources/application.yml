@@ -1,0 +1,41 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api          # todo queda bajo /api, igual que la ruta /api/* de CloudFront
+  shutdown: graceful            # termina las peticiones en curso antes de apagarse
+
+spring:
+  application:
+    name: champions-gym-api
+  datasource:                   # valores locales; en AWS los cambian las variables SPRING_DATASOURCE_*
+    url: jdbc:postgresql://localhost:5432/gym
+    username: gym_admin
+    password: local123
+    hikari:
+      maximum-pool-size: 5      # 10 tareas x 5 = 50 conexiones, dentro del limite de db.t4g.micro
+      connection-timeout: 3000  # si la BD no responde, falla en 3 s y no se cuelga (RNF 13)
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate        # las tablas solo las crea Flyway
+  flyway:
+    out-of-order: true          # acepta migraciones de ramas que se unieron tarde
+  session:
+    timeout: 30m
+    jdbc:
+      initialize-schema: never  # la tabla de sesiones la crea Flyway
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true           # /api/actuator/health/liveness (health check de ECS)
+
+app:
+  version: ${APP_VERSION:local}
