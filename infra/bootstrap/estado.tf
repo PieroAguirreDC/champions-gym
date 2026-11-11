@@ -22,6 +22,11 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "tfstate" {
   }
 }
 
+# Cada cambio del bucket se envia a EventBridge (sin costo mientras no haya reglas que lo usen).
+resource "aws_s3_bucket_notification" "tfstate" {
+  bucket      = aws_s3_bucket.tfstate.id
+  eventbridge = true
+}
 resource "aws_s3_bucket_public_access_block" "tfstate" {
   bucket = aws_s3_bucket.tfstate.id
 
