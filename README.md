@@ -28,7 +28,7 @@ Atributos de calidad del proyecto: **Disponibilidad** y **Escalabilidad**.
 | `qa/` | Configuración del QA local con docker-compose (nunca toca AWS) |
 | `pruebas/carga/` | Pruebas de carga con k6 |
 | `docs/` | Diagrama de arquitectura y evidencias de los RNF |
-| `.github/` | CI/CD con GitHub Actions, plantilla de PR y revisores |
+| `.github/` | CI/CD con GitHub Actions y revisores |
 
 ## Equipo
 

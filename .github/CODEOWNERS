@@ -1,0 +1,4 @@
+# GitHub pide revision automaticamente a estas personas en cada PR.
+# El autor no puede aprobarse a si mismo: siempre aprueba alguno de los otros dos.
+# Reemplazar JOAQUIN_GITHUB por el usuario de GitHub de Joaquin antes del commit.
+* @fabriziomontero36-cyber @PieroAguirreDC @jportellap

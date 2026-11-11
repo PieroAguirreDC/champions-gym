@@ -1,0 +1,40 @@
+# QA local (el informe lo pide fuera de AWS): PostgreSQL + API + web, como en AWS.
+#   docker compose up --build   -> todo; la web queda en http://localhost:8081
+#   docker compose up -d bd     -> solo la BD, para correr las pruebas (cd app && ./mvnw verify)
+services:
+  bd:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: gym
+      POSTGRES_USER: gym_admin
+      POSTGRES_PASSWORD: local123
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gym_admin -d gym"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://bd:5432/gym
+      SPRING_DATASOURCE_USERNAME: gym_admin
+      SPRING_DATASOURCE_PASSWORD: local123
+      APP_VERSION: local
+    ports:
+      - "8080:8080"
+    depends_on:
+      bd:
+        condition: service_healthy
+
+  web:
+    image: nginx:1.29-alpine
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./qa/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "8081:80"
+    depends_on:
+      - api
