@@ -17,7 +17,28 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "tfstate" {
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+      sse_algorithm = "aws:kms" # clave KMS administrada por AWS (sin costo mensual)
+    }
+    bucket_key_enabled = true # menos llamadas a KMS
+  }
+}
+
+# Las versiones viejas del estado se borran a los 90 dias; la actual nunca se borra.
+resource "aws_s3_bucket_lifecycle_configuration" "tfstate" {
+  bucket = aws_s3_bucket.tfstate.id
+
+  rule {
+    id     = "borrar-versiones-viejas"
+    status = "Enabled"
+
+    filter {}
+
+    noncurrent_version_expiration {
+      noncurrent_days = 90
+    }
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 7
     }
   }
 }
