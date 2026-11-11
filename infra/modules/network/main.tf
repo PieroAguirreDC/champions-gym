@@ -93,6 +93,7 @@ resource "aws_security_group" "db" {
 
 resource "aws_vpc_security_group_egress_rule" "vpclink_to_api" {
   security_group_id            = aws_security_group.vpclink.id
+  description                  = "VPC Link hacia la API en el puerto de la app"
   referenced_security_group_id = aws_security_group.api.id
   ip_protocol                  = "tcp"
   from_port                    = var.app_port
@@ -101,6 +102,7 @@ resource "aws_vpc_security_group_egress_rule" "vpclink_to_api" {
 
 resource "aws_vpc_security_group_ingress_rule" "api_from_vpclink" {
   security_group_id            = aws_security_group.api.id
+  description                  = "Solo el VPC Link entra a la API"
   referenced_security_group_id = aws_security_group.vpclink.id
   ip_protocol                  = "tcp"
   from_port                    = var.app_port
@@ -111,12 +113,14 @@ resource "aws_vpc_security_group_ingress_rule" "api_from_vpclink" {
 # La entrada sigue cerrada: solo 8080 desde el VPC Link (regla api_from_vpclink).
 resource "aws_vpc_security_group_egress_rule" "api_all" {
   security_group_id = aws_security_group.api.id
+  description       = "Salida por el Internet Gateway: ECR, CloudWatch, SES y Mercado Pago"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1"
 }
 
 resource "aws_vpc_security_group_ingress_rule" "db_from_api" {
   security_group_id            = aws_security_group.db.id
+  description                  = "Solo la API entra a PostgreSQL"
   referenced_security_group_id = aws_security_group.api.id
   ip_protocol                  = "tcp"
   from_port                    = 5432
