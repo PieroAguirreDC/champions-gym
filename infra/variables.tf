@@ -26,3 +26,25 @@ variable "image_tag" {
   description = "Tag de la imagen en ECR = SHA del commit. Lo pasa el pipeline (o el Integrante en el primer despliegue)."
   type        = string
 }
+
+variable "vpc_id" {
+  description = "ID de la VPC principal"
+  type        = string
+}
+
+variable "private_subnet_ids" {
+  description = "Lista de IDs de las subredes privadas"
+  type        = list(string)
+}
+
+variable "db_username" {
+  description = "Administrador de la BD de Champion's Gym"
+  type        = string
+  default     = "postgres"
+}
+
+variable "db_password" {
+  description = "Contraseña de la BD"
+  type        = string
+  sensitive   = true
+}
