@@ -7,3 +7,4 @@ aws_region = "sa-east-1"
 # ---------- Piero ----------
 
 # ---------- Joaquin ----------
+db_multi_az = true #false= sin standby
