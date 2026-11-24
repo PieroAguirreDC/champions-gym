@@ -12,9 +12,9 @@ Atributos de calidad del proyecto: **Disponibilidad** y **Escalabilidad**.
 | Qué | Camino |
 |---|---|
 | Páginas (`/`, `/servicios.html`) | Socio → CloudFront + WAF → S3 |
-| API (`/api/...`) | Socio → CloudFront + WAF → API Gateway → VPC Link → tareas Fargate (2 zonas) → RDS PostgreSQL Multi-AZ |
-| Salida de las tareas a internet | Internet Gateway → ECR, CloudWatch, SES y Mercado Pago |
-| Aviso de pago (webhook) | Mercado Pago → CloudFront → API Gateway → tareas Fargate |
+| API (`/api/...`) | Socio → CloudFront + WAF → API Gateway → VPC Link → ALB interno → tareas Fargate (2 zonas, subredes privadas) → RDS PostgreSQL Multi-AZ |
+| Salida de las tareas a internet | NAT Gateway de su zona → Internet Gateway → ECR, CloudWatch, SES y Mercado Pago |
+| Aviso de pago (webhook) | Mercado Pago → CloudFront → API Gateway → VPC Link → ALB interno → tareas Fargate |
 
 ## Estructura del repositorio
 
@@ -23,7 +23,7 @@ Atributos de calidad del proyecto: **Disponibilidad** y **Escalabilidad**.
 | `app/` | API Spring Boot: módulos `suscripciones`, `aforo`, `pagos`, `correos` y `comun` |
 | `frontend/` | Landing (inicio y servicios) que se publica en S3 |
 | `infra/bootstrap/` | Lo que se crea una sola vez: bucket del estado, ECR, usuarios del equipo y roles de GitHub |
-| `infra/modules/` | Módulos de Terraform (red, base de datos, ECS, API Gateway, web...) |
+| `infra/modules/` | Módulos de Terraform (red, base de datos, ECS, API Gateway y ALB, web...) |
 | `infra/*.tf` | Raíz de Terraform del entorno `prod`: un archivo por componente |
 | `qa/` | Configuración del QA local con docker-compose (nunca toca AWS) |
 | `pruebas/carga/` | Pruebas de carga con k6 |
