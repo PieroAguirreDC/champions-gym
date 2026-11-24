@@ -12,6 +12,12 @@ resource "aws_vpc" "this" {
   tags = { Name = "${local.name}-vpc" }
 }
 
+resource "aws_default_security_group" "this" {
+  vpc_id = aws_vpc.this.id
+
+  tags = { Name = "${local.name}-sg-default-cerrado" }# el grupo de seguridad de la VPC queda sin reglas
+}
+
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
 
