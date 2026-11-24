@@ -7,6 +7,10 @@ resource "aws_ecr_repository" "api" {
   image_scanning_configuration {
     scan_on_push = true # busca vulnerabilidades al subir
   }
+
+  encryption_configuration {
+    encryption_type = "KMS" # cifrado con clave KMS dada por AWS
+  }
 }
 
 resource "aws_ecr_lifecycle_policy" "api" {
